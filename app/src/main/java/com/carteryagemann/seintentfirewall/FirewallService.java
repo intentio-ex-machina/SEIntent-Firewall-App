@@ -22,9 +22,9 @@ public class FirewallService extends Service {
     private final static int CHECK_INTENT = 1;
     protected final static int GET_STATS  = 2;
 
-    private static int connectedClients = 0;
-    private static int allowedCount = 0;
-    private static int blockedCount = 0;
+    private int connectedClients = 0;
+    private int allowedCount = 0;
+    private int blockedCount = 0;
 
     protected final static String EXTRA_IS_ENABLED = "EXTRA_IS_ENABLED";
     protected final static String EXTRA_ALLOWED_COUNT = "EXTRA_CONNECTED_ALLOWED_COUNT";
@@ -37,7 +37,7 @@ public class FirewallService extends Service {
      * The main handler for the firewall service. The intent firewall will deliver messages to this
      * handler.
      */
-    private final static class ServiceHandler extends Handler {
+    private final class ServiceHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             final int what = msg.what;
@@ -52,7 +52,7 @@ public class FirewallService extends Service {
         }
     }
 
-    private static void gatherStats(Messenger replyTo) {
+    private void gatherStats(Messenger replyTo) {
         if (replyTo == null) return;
 
         Bundle replyData = new Bundle();
@@ -86,5 +86,22 @@ public class FirewallService extends Service {
     public boolean onUnbind(Intent intent) {
         connectedClients--;
         return super.onUnbind(intent);
+    }
+
+    /**
+     * An interface for classes to be useable by the firewall service as an intent checker.
+     */
+    //private interface IntentCheckerInterface {
+    //    public Message checkIntent(Message msg);
+    //}
+
+    /**
+     * The base intent checker class from which all intent checkers will extend.
+     *
+     * Intent checkers should either reply with the bundle to be sent back to the intent firewall or
+     * null if the enclosed intent should be blocked.
+     */
+    public static abstract class IntentChecker {
+        public abstract Bundle checkIntent(Bundle data);
     }
 }
