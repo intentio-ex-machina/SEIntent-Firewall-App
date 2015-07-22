@@ -89,13 +89,6 @@ public class FirewallService extends Service {
     }
 
     /**
-     * An interface for classes to be useable by the firewall service as an intent checker.
-     */
-    //private interface IntentCheckerInterface {
-    //    public Message checkIntent(Message msg);
-    //}
-
-    /**
      * The base intent checker class from which all intent checkers will extend.
      *
      * Intent checkers should either reply with the bundle to be sent back to the intent firewall or
