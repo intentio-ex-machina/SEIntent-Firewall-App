@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -25,6 +27,7 @@ import android.widget.TextView;
  */
 public class StatusActivity extends AppCompatActivity {
 
+    private static final int SERVICE_POLLING_RATE = 2000;
     private static final int SEND_GET_STATS  = 1;
 
     private boolean fakeIFWEnabled = false;
@@ -44,6 +47,14 @@ public class StatusActivity extends AppCompatActivity {
                 mFirewallConnection,
                 Service.BIND_AUTO_CREATE);
         mInternalHandler = new InternalHandler();
+        // Set up policy spinner
+        Spinner spinner = (Spinner) findViewById(R.id.policySpinner);
+        if (spinner != null) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                    R.array.policy_array, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -80,6 +91,10 @@ public class StatusActivity extends AppCompatActivity {
             case R.id.enable_debug:
                 Button testButton = (Button) findViewById(R.id.fireTestButton);
                 if (testButton != null) testButton.setVisibility(View.VISIBLE);
+                Spinner policySpinner = (Spinner) findViewById(R.id.policySpinner);
+                if (policySpinner != null) policySpinner.setVisibility(View.VISIBLE);
+                Button policyButton = (Button) findViewById(R.id.policyButton);
+                if (policyButton != null) policyButton.setVisibility(View.VISIBLE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -100,6 +115,21 @@ public class StatusActivity extends AppCompatActivity {
         }
     }
 
+    public void debugLoadPolicy(View view) {
+        Spinner spinner = (Spinner) findViewById(R.id.policySpinner);
+        if (spinner == null) return;
+        int pos = spinner.getSelectedItemPosition();
+        // Instruct firewall service to load new policy
+        if (mFirewallService == null) return;
+        Message msg = Message.obtain(null, FirewallService.LOAD_POLICY);
+        msg.arg1 = pos;
+        try {
+            mFirewallService.send(msg);
+        } catch (RemoteException e) {
+            Log.w(FirewallService.TAG, "Failed to send load policy message to intent firewall");
+        }
+    }
+
     private void unpackStats(Bundle data) {
         if (data == null) return;
 
@@ -112,8 +142,6 @@ public class StatusActivity extends AppCompatActivity {
         TextView policyView = (TextView) findViewById(R.id.policyValue);
         TextView allowView = (TextView) findViewById(R.id.allowValue);
         TextView blockView = (TextView) findViewById(R.id.blockValue);
-
-        Log.v(FirewallService.TAG, "Updating values in view.");
 
         if (enabledView != null) {
             if (isEnabled) {
@@ -148,7 +176,7 @@ public class StatusActivity extends AppCompatActivity {
                         Message request = Message.obtain(null, FirewallService.GET_STATS);
                         request.replyTo = mMessenger;
                         mFirewallService.send(request);
-                        mInternalHandler.sendEmptyMessageDelayed(SEND_GET_STATS, 5000);
+                        mInternalHandler.sendEmptyMessageDelayed(SEND_GET_STATS, SERVICE_POLLING_RATE);
                     } catch (RemoteException e) {
                         Log.w(FirewallService.TAG, "Failed to send message to firewall service.");
                     }
@@ -162,7 +190,7 @@ public class StatusActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mFirewallService = new Messenger(iBinder);
             // Periodically get stats from firewall service
-            mInternalHandler.sendEmptyMessageDelayed(SEND_GET_STATS, 5000);
+            mInternalHandler.sendEmptyMessageDelayed(SEND_GET_STATS, SERVICE_POLLING_RATE);
         }
 
         @Override

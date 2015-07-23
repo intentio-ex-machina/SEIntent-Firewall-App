@@ -20,11 +20,12 @@ public class FirewallService extends Service {
     protected final static String TAG = "SEIntentFirewall";
 
     protected final static int CHECK_INTENT = 1;
-    protected final static int GET_STATS  = 2;
+    protected final static int GET_STATS    = 2;
+    protected final static int LOAD_POLICY  = 3;
 
-    private int connectedClients = 0;
-    private int allowedCount = 0;
-    private int blockedCount = 0;
+    private static int connectedClients = 0;
+    private static int allowedCount = 0;
+    private static int blockedCount = 0;
 
     protected final static String EXTRA_IS_ENABLED = "EXTRA_IS_ENABLED";
     protected final static String EXTRA_ALLOWED_COUNT = "EXTRA_CONNECTED_ALLOWED_COUNT";
@@ -45,7 +46,6 @@ public class FirewallService extends Service {
             final int what = msg.what;
             switch (what) {
                 case CHECK_INTENT:
-                    Log.v(TAG, "Got check intent request.");
                     Bundle data = msg.getData();
                     Bundle rData = null;
                     if (data != null && mIntentChecker != null)
@@ -54,7 +54,6 @@ public class FirewallService extends Service {
                         Message response = Message.obtain(null, CHECK_INTENT);
                         response.setData(rData);
                         try {
-                            Log.v(TAG, "Sending reply to check intent request.");
                             msg.replyTo.send(response);
                         } catch (RemoteException e) {
                             Log.w(TAG, "Failed to send intent to intent firewall.");
@@ -67,7 +66,25 @@ public class FirewallService extends Service {
                 case GET_STATS:
                     gatherStats(msg.replyTo);
                     break;
+                case LOAD_POLICY:
+                    loadPolicy(msg.arg1);
             }
+        }
+    }
+
+    private void loadPolicy(int option) {
+        switch (option) {
+            case 0: //AllowAll
+                mIntentChecker = new IntentCheckerAllowAll();
+                break;
+            case 1: //BlockAll
+                mIntentChecker = new IntentCheckerBlockAll();
+                break;
+            case 2: //BlockBrowser
+                mIntentChecker = new IntentCheckerBlockBrowser();
+                break;
+            default:
+                Log.w(TAG, "Unknown policy request: " + option);
         }
     }
 

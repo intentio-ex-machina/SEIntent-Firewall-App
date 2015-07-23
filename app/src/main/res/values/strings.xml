@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">SEIntent Firewall</string>
     <string name="app_author">Carter Yagemann</string>
-    <string name="app_version">0.3</string>
-    <string name="app_codename">\"Lurking Shadow\"</string>
+    <string name="app_version">0.4</string>
+    <string name="app_codename">\"Creeping Shadow\"</string>
     <string name="app_copyright">Copyright 2015 - All rights reserved.</string>
+
+    <string-array name="policy_array">
+        <item>AllowAll</item>
+        <item>BlockAll</item>
+        <item>BlockBrowser</item>
+    </string-array>
 </resources>
