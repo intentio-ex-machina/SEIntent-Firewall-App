@@ -45,6 +45,7 @@ public class FirewallService extends Service {
             final int what = msg.what;
             switch (what) {
                 case CHECK_INTENT:
+                    Log.v(TAG, "Got check intent request.");
                     Bundle data = msg.getData();
                     Bundle rData = null;
                     if (data != null && mIntentChecker != null)
@@ -53,6 +54,7 @@ public class FirewallService extends Service {
                         Message response = Message.obtain(null, CHECK_INTENT);
                         response.setData(rData);
                         try {
+                            Log.v(TAG, "Sending reply to check intent request.");
                             msg.replyTo.send(response);
                         } catch (RemoteException e) {
                             Log.w(TAG, "Failed to send intent to intent firewall.");
