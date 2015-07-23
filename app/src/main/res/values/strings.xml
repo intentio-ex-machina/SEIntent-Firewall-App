@@ -9,5 +9,6 @@
         <item>AllowAll</item>
         <item>BlockAll</item>
         <item>BlockBrowser</item>
+        <item>BlockServices</item>
     </string-array>
 </resources>
