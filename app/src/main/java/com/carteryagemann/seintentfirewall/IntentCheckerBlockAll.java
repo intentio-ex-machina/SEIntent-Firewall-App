@@ -11,4 +11,9 @@ public class IntentCheckerBlockAll extends FirewallService.IntentChecker {
     public Bundle checkIntent(Bundle data) {
         return null;
     }
+
+    @Override
+    public String getName() {
+        return "BlockAll";
+    }
 }

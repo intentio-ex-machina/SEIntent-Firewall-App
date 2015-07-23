@@ -19,7 +19,7 @@ public class FirewallService extends Service {
 
     protected final static String TAG = "SEIntentFirewall";
 
-    private final static int CHECK_INTENT = 1;
+    protected final static int CHECK_INTENT = 1;
     protected final static int GET_STATS  = 2;
 
     private int connectedClients = 0;
@@ -33,6 +33,8 @@ public class FirewallService extends Service {
 
     final Messenger mMessenger = new Messenger(new ServiceHandler());
 
+    private IntentChecker mIntentChecker = new IntentCheckerAllowAll();
+
     /**
      * The main handler for the firewall service. The intent firewall will deliver messages to this
      * handler.
@@ -43,7 +45,22 @@ public class FirewallService extends Service {
             final int what = msg.what;
             switch (what) {
                 case CHECK_INTENT:
-                    //TODO
+                    Bundle data = msg.getData();
+                    Bundle rData = null;
+                    if (data != null && mIntentChecker != null)
+                        rData = mIntentChecker.checkIntent(data);
+                    if (rData != null && msg.replyTo != null) {
+                        Message response = Message.obtain(null, CHECK_INTENT);
+                        response.setData(rData);
+                        try {
+                            msg.replyTo.send(response);
+                        } catch (RemoteException e) {
+                            Log.w(TAG, "Failed to send intent to intent firewall.");
+                        }
+                        allowedCount++;
+                    } else {
+                        blockedCount++;
+                    }
                     break;
                 case GET_STATS:
                     gatherStats(msg.replyTo);
@@ -61,7 +78,7 @@ public class FirewallService extends Service {
         } else {
             replyData.putBoolean(EXTRA_IS_ENABLED, false);
         }
-        replyData.putString(EXTRA_POLICY, "Default");
+        replyData.putString(EXTRA_POLICY, mIntentChecker.getName());
         replyData.putInt(EXTRA_ALLOWED_COUNT, allowedCount);
         replyData.putInt(EXTRA_BLOCKED_COUNT, blockedCount);
 
@@ -96,5 +113,6 @@ public class FirewallService extends Service {
      */
     public static abstract class IntentChecker {
         public abstract Bundle checkIntent(Bundle data);
+        public abstract String getName();
     }
 }

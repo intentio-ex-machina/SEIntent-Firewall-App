@@ -11,4 +11,9 @@ public class IntentCheckerAllowAll extends FirewallService.IntentChecker {
     public Bundle checkIntent(Bundle data) {
         return data;
     }
+
+    @Override
+    public String getName() {
+        return "AllowAll";
+    }
 }

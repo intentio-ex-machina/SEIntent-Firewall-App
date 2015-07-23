@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -76,9 +78,25 @@ public class StatusActivity extends AppCompatActivity {
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.enable_debug:
+                Button testButton = (Button) findViewById(R.id.fireTestButton);
+                if (testButton != null) testButton.setVisibility(View.VISIBLE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void fireTestIntent(View view) {
+        Message msg = Message.obtain(null, FirewallService.CHECK_INTENT);
+        Bundle data = new Bundle();
+        Intent emptyIntent = new Intent();
+        data.putParcelable("INTENT", emptyIntent);
+        msg.setData(data);
+        msg.replyTo = mMessenger;
+        try {
+            mFirewallService.send(msg);
+        } catch (RemoteException e) {
+            Log.w(FirewallService.TAG, "Failed to send test check intent.");
         }
     }
 
