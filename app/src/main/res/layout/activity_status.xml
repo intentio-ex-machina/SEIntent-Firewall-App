@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/statusValue"
-        android:text="Disabled"
+        android:text="Unknown"
         android:layout_marginLeft="5dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />

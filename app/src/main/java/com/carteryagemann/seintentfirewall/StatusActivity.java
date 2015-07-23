@@ -30,12 +30,12 @@ public class StatusActivity extends AppCompatActivity {
     private static final int SERVICE_POLLING_RATE = 2000;
     private static final int SEND_GET_STATS  = 1;
 
-    private boolean fakeIFWEnabled = false;
-
     Handler mInternalHandler;
     Messenger mMessenger = new Messenger(new StatusHandler());
     Messenger mFirewallService;
     FirewallConnection mFirewallConnection;
+
+    private boolean debugEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +89,22 @@ public class StatusActivity extends AppCompatActivity {
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.enable_debug:
-                Button testButton = (Button) findViewById(R.id.fireTestButton);
-                if (testButton != null) testButton.setVisibility(View.VISIBLE);
-                Spinner policySpinner = (Spinner) findViewById(R.id.policySpinner);
-                if (policySpinner != null) policySpinner.setVisibility(View.VISIBLE);
-                Button policyButton = (Button) findViewById(R.id.policyButton);
-                if (policyButton != null) policyButton.setVisibility(View.VISIBLE);
+                if (!debugEnabled) {
+                    Button testButton = (Button) findViewById(R.id.fireTestButton);
+                    if (testButton != null) testButton.setVisibility(View.VISIBLE);
+                    Spinner policySpinner = (Spinner) findViewById(R.id.policySpinner);
+                    if (policySpinner != null) policySpinner.setVisibility(View.VISIBLE);
+                    Button policyButton = (Button) findViewById(R.id.policyButton);
+                    if (policyButton != null) policyButton.setVisibility(View.VISIBLE);
+                } else {
+                    Button testButton = (Button) findViewById(R.id.fireTestButton);
+                    if (testButton != null) testButton.setVisibility(View.INVISIBLE);
+                    Spinner policySpinner = (Spinner) findViewById(R.id.policySpinner);
+                    if (policySpinner != null) policySpinner.setVisibility(View.INVISIBLE);
+                    Button policyButton = (Button) findViewById(R.id.policyButton);
+                    if (policyButton != null) policyButton.setVisibility(View.INVISIBLE);
+                }
+                debugEnabled = !debugEnabled;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -133,7 +143,6 @@ public class StatusActivity extends AppCompatActivity {
     private void unpackStats(Bundle data) {
         if (data == null) return;
 
-        boolean isEnabled = data.getBoolean(FirewallService.EXTRA_IS_ENABLED, false);
         String policy = data.getString(FirewallService.EXTRA_POLICY, "Unknown");
         int allowCount = data.getInt(FirewallService.EXTRA_ALLOWED_COUNT, 0);
         int blockCount = data.getInt(FirewallService.EXTRA_BLOCKED_COUNT, 0);
@@ -144,10 +153,10 @@ public class StatusActivity extends AppCompatActivity {
         TextView blockView = (TextView) findViewById(R.id.blockValue);
 
         if (enabledView != null) {
-            if (isEnabled) {
-                enabledView.setText("Enabled");
+            if (mFirewallService != null) {
+                enabledView.setText("Running");
             } else {
-                enabledView.setText("Disabled");
+                enabledView.setText("Stopped");
             }
         }
         if (policyView != null) policyView.setText(policy);

@@ -23,11 +23,9 @@ public class FirewallService extends Service {
     protected final static int GET_STATS    = 2;
     protected final static int LOAD_POLICY  = 3;
 
-    private static int connectedClients = 0;
     private static int allowedCount = 0;
     private static int blockedCount = 0;
 
-    protected final static String EXTRA_IS_ENABLED = "EXTRA_IS_ENABLED";
     protected final static String EXTRA_ALLOWED_COUNT = "EXTRA_CONNECTED_ALLOWED_COUNT";
     protected final static String EXTRA_BLOCKED_COUNT = "EXTRA_BLOCKED_COUNT";
     protected final static String EXTRA_POLICY = "EXTRA_POLICY";
@@ -92,11 +90,6 @@ public class FirewallService extends Service {
         if (replyTo == null) return;
 
         Bundle replyData = new Bundle();
-        if (connectedClients > 1) {
-            replyData.putBoolean(EXTRA_IS_ENABLED, true);
-        } else {
-            replyData.putBoolean(EXTRA_IS_ENABLED, false);
-        }
         replyData.putString(EXTRA_POLICY, mIntentChecker.getName());
         replyData.putInt(EXTRA_ALLOWED_COUNT, allowedCount);
         replyData.putInt(EXTRA_BLOCKED_COUNT, blockedCount);
@@ -114,14 +107,7 @@ public class FirewallService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Received bind request.");
-        connectedClients++;
         return mMessenger.getBinder();
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        connectedClients--;
-        return super.onUnbind(intent);
     }
 
     /**
