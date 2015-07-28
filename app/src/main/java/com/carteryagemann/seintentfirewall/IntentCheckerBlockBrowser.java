@@ -21,7 +21,7 @@ public class IntentCheckerBlockBrowser extends FirewallService.IntentChecker {
         }
         ComponentName receiver = intent.getComponent();
         // Block this intent if the receiver is the browser
-        if (receiver.getPackageName().equals("com.android.browser")) {
+        if (receiver != null && receiver.getPackageName().equals("com.android.browser")) {
             return null;
         } else {
             return data;

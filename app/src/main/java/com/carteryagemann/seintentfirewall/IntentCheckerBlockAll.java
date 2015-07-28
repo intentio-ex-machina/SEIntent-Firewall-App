@@ -23,7 +23,7 @@ public class IntentCheckerBlockAll extends FirewallService.IntentChecker {
         }
         ComponentName receiver = intent.getComponent();
         // Block this intent if the receiver is the browser
-        if (receiver.getPackageName().equals("com.carteryagemann.seintentfirewall")) {
+        if (receiver != null && receiver.getPackageName().equals("com.carteryagemann.seintentfirewall")) {
             return data;
         } else {
             return null;

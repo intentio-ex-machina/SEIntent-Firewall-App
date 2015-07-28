@@ -22,7 +22,8 @@ public class IntentCheckerBlockServices extends FirewallService.IntentChecker {
         ComponentName receiver = intent.getComponent();
 
         // It would be very bad to block our own app, so we'll allow intents to us no matter what.
-        if (receiver.getPackageName().equals("com.carteryagemann.seintentfirewall")) return data;
+        if (receiver != null && receiver.getPackageName().equals("com.carteryagemann.seintentfirewall"))
+            return data;
 
         // Block service intents and allow everything else.
         int intentType = data.getInt("intentType", -1);
