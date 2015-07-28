@@ -10,5 +10,6 @@
         <item>BlockAll</item>
         <item>BlockBrowser</item>
         <item>BlockServices</item>
+        <item>BlockActivities</item>
     </string-array>
 </resources>
