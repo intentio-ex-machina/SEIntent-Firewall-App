@@ -1,7 +1,10 @@
 package com.carteryagemann.seintentfirewall;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -10,14 +13,12 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ import android.widget.TextView;
  * This is the main activity which will be launched when a user starts the app. It shows some basic
  * status information.
  */
-public class StatusActivity extends AppCompatActivity {
+public class StatusActivity extends Activity {
 
     private static final int SERVICE_POLLING_RATE = 2000;
     private static final int SEND_GET_STATS  = 1;
@@ -34,8 +35,6 @@ public class StatusActivity extends AppCompatActivity {
     Messenger mMessenger = new Messenger(new StatusHandler());
     Messenger mFirewallService;
     FirewallConnection mFirewallConnection;
-
-    private boolean debugEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +46,6 @@ public class StatusActivity extends AppCompatActivity {
                 mFirewallConnection,
                 Service.BIND_AUTO_CREATE);
         mInternalHandler = new InternalHandler();
-        // Set up policy spinner
-        Spinner spinner = (Spinner) findViewById(R.id.policySpinner);
-        if (spinner != null) {
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    R.array.policy_array, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-        }
     }
 
     @Override
@@ -88,44 +79,13 @@ public class StatusActivity extends AppCompatActivity {
             case R.id.about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
-            case R.id.enable_debug:
-                if (!debugEnabled) {
-                    Button testButton = (Button) findViewById(R.id.fireTestButton);
-                    if (testButton != null) testButton.setVisibility(View.VISIBLE);
-                    Spinner policySpinner = (Spinner) findViewById(R.id.policySpinner);
-                    if (policySpinner != null) policySpinner.setVisibility(View.VISIBLE);
-                    Button policyButton = (Button) findViewById(R.id.policyButton);
-                    if (policyButton != null) policyButton.setVisibility(View.VISIBLE);
-                } else {
-                    Button testButton = (Button) findViewById(R.id.fireTestButton);
-                    if (testButton != null) testButton.setVisibility(View.INVISIBLE);
-                    Spinner policySpinner = (Spinner) findViewById(R.id.policySpinner);
-                    if (policySpinner != null) policySpinner.setVisibility(View.INVISIBLE);
-                    Button policyButton = (Button) findViewById(R.id.policyButton);
-                    if (policyButton != null) policyButton.setVisibility(View.INVISIBLE);
-                }
-                debugEnabled = !debugEnabled;
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void fireTestIntent(View view) {
-        Message msg = Message.obtain(null, FirewallService.CHECK_INTENT);
-        Bundle data = new Bundle();
-        Intent emptyIntent = new Intent();
-        data.putParcelable("INTENT", emptyIntent);
-        msg.setData(data);
-        msg.replyTo = mMessenger;
-        try {
-            mFirewallService.send(msg);
-        } catch (RemoteException e) {
-            Log.w(FirewallService.TAG, "Failed to send test check intent.");
-        }
-    }
-
     public void debugLoadPolicy(View view) {
+        /*
         Spinner spinner = (Spinner) findViewById(R.id.policySpinner);
         if (spinner == null) return;
         int pos = spinner.getSelectedItemPosition();
@@ -138,6 +98,24 @@ public class StatusActivity extends AppCompatActivity {
         } catch (RemoteException e) {
             Log.w(FirewallService.TAG, "Failed to send load policy message to intent firewall");
         }
+        */
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Select policy")
+                .setItems(R.array.policy_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Instruct firewall service to load new policy
+                        if (mFirewallService == null) return;
+                        Message msg = Message.obtain(null, FirewallService.LOAD_POLICY);
+                        msg.arg1 = which;
+                        try {
+                            mFirewallService.send(msg);
+                        } catch (RemoteException e) {
+                            Log.w(FirewallService.TAG,
+                                    "Failed to send load policy message to intent firewall");
+                        }
+                    }
+                });
+        builder.create().show();
     }
 
     private void unpackStats(Bundle data) {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="dark_orange" type="color">#FA6900</item>
+    <item name="light_orange" type="color">#F38630</item>
+    <item name="tan" type="color">#E0E4CC</item>
+    <item name="black" type="color">#000000</item>
+    <item name="white" type="color">#FFFFFF</item>
+</resources>

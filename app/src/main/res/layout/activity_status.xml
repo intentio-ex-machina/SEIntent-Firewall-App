@@ -84,31 +84,14 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:visibility="invisible"
-        android:text="Fire Test Check Intent"
-        android:id="@+id/fireTestButton"
-        android:onClick="fireTestIntent"
-        android:layout_below="@id/blockText" />
-    
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:visibility="invisible"
-        android:id="@+id/policySpinner"
-        android:layout_below="@id/fireTestButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@drawable/policy_button_style"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         android:id="@+id/policyButton"
-        android:visibility="invisible"
         android:text="Load Policy"
         android:onClick="debugLoadPolicy"
-        android:layout_alignBottom="@id/policySpinner"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

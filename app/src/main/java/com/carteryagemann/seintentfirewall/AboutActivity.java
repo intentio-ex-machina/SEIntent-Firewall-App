@@ -1,15 +1,15 @@
 package com.carteryagemann.seintentfirewall;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 /**
  * Simple activity which shows information about the application. The core of this application is
  * its firewall service, but this gives the user something to look at.
  */
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

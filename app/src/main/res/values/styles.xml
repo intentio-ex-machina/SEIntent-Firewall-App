@@ -1,8 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/light_orange</item>
+        <item name="android:colorPrimaryDark">@color/dark_orange</item>
+        <item name="android:colorAccent">@color/dark_orange</item>
+
+        <item name="android:navigationBarColor">@color/black</item>
+
+        <item name="android:windowBackground">@color/tan</item>
     </style>
 
 </resources>

@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">SEIntent Firewall</string>
     <string name="app_author">Carter Yagemann</string>
-    <string name="app_version">0.5</string>
-    <string name="app_codename">\"Bounding Shadow\"</string>
+    <string name="app_version">1.0</string>
+    <string name="app_codename">\"Rampaging Shadow\"</string>
     <string name="app_copyright">Copyright 2015 - All rights reserved.</string>
 
     <string-array name="policy_array">
-        <item>AllowAll</item>
-        <item>BlockAll</item>
-        <item>BlockBrowser</item>
-        <item>BlockServices</item>
-        <item>BlockActivities</item>
+        <item>Allow All Intents</item>
+        <item>Block All Intents</item>
+        <item>Block Browser App</item>
+        <item>Block Service Intents</item>
+        <item>Block Activity Intents</item>
     </string-array>
 </resources>
