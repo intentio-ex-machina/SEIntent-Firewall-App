@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * A very simple intent checker which allows every packet it checks.
+ * An intent checker which redirects intents which are heading to the browser application.
  */
 public class IntentCheckerBlockBrowser extends FirewallService.IntentChecker {
 
@@ -20,9 +20,12 @@ public class IntentCheckerBlockBrowser extends FirewallService.IntentChecker {
             return null;
         }
         ComponentName receiver = intent.getComponent();
-        // Block this intent if the receiver is the browser
+        // Redirect this intent if the receiver is the browser
         if (receiver != null && receiver.getPackageName().equals("com.android.browser")) {
-            return null;
+            intent.setComponent(new ComponentName("com.carteryagemann.seintentfirewall",
+                    "com.carteryagemann.seintentfirewall.BlockActivity"));
+            data.putParcelable("intent", intent);
+            return data;
         } else {
             return data;
         }
