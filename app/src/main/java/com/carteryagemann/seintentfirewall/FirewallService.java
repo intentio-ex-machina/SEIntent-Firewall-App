@@ -87,6 +87,12 @@ public class FirewallService extends Service {
             case 4: //BlockActivies
                 mIntentChecker = new IntentCheckerBlockActivities();
                 break;
+            case 5: //BlockYouTube
+                mIntentChecker = new IntentCheckerBlockYouTube();
+                break;
+            case 6: //SafeFile
+                mIntentChecker = new IntentCheckerSafeFile();
+                break;
             default:
                 Log.w(TAG, "Unknown policy request: " + option);
         }

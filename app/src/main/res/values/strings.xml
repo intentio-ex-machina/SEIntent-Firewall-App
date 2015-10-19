@@ -11,5 +11,7 @@
         <item>Block Browser App</item>
         <item>Block Service Intents</item>
         <item>Block Activity Intents</item>
+        <item>Block YouTube</item>
+        <item>Safe File</item>
     </string-array>
 </resources>

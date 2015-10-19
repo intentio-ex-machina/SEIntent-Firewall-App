@@ -18,8 +18,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -85,20 +83,6 @@ public class StatusActivity extends Activity {
     }
 
     public void debugLoadPolicy(View view) {
-        /*
-        Spinner spinner = (Spinner) findViewById(R.id.policySpinner);
-        if (spinner == null) return;
-        int pos = spinner.getSelectedItemPosition();
-        // Instruct firewall service to load new policy
-        if (mFirewallService == null) return;
-        Message msg = Message.obtain(null, FirewallService.LOAD_POLICY);
-        msg.arg1 = pos;
-        try {
-            mFirewallService.send(msg);
-        } catch (RemoteException e) {
-            Log.w(FirewallService.TAG, "Failed to send load policy message to intent firewall");
-        }
-        */
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         builder.setTitle("Select policy")
                 .setItems(R.array.policy_array, new DialogInterface.OnClickListener() {
