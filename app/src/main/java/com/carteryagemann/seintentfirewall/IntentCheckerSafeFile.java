@@ -27,6 +27,28 @@ public class IntentCheckerSafeFile extends FirewallService.IntentChecker {
                 data.putParcelable("intent", intent);
             }
         }
+        // Check some extra fields as well
+        try {
+            String extraText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (extraText != null && extraText.contains("malicious_file.png")) {
+                extraText = extraText.replace("malicious_file.png", "benign_file.png");
+                intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                data.putParcelable("intent", intent);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Could not unmarshal extras bundle.");
+        }
+        try {
+            String extraStream = intent.getStringExtra(Intent.EXTRA_STREAM);
+            if (extraStream != null && extraStream.contains("malicious_file.png")) {
+                extraStream = extraStream.replace("malicious_file.png", "benign_file.png");
+                intent.putExtra(Intent.EXTRA_STREAM, extraStream);
+                data.putParcelable("intent", intent);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Could not unmarshal extras bundle.");
+        }
+
         return data;
     }
 
