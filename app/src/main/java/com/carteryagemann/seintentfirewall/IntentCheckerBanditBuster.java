@@ -38,7 +38,7 @@ public class IntentCheckerBanditBuster extends FirewallService.IntentChecker {
         }
 
         // We're tracking a specific package because this is a proof-of-concept
-        if (!callerPackage.equalsIgnoreCase("com.carteryagemann.marshalbandit")) {
+        if (!callerPackage.equalsIgnoreCase("com.carteryagemann.boondocksaint")) {
             return data;
         }
 
@@ -53,13 +53,8 @@ public class IntentCheckerBanditBuster extends FirewallService.IntentChecker {
         }
 
         if (BULLET_COUNT > THRESHOLD) {
-            //mContext.startActivity(new Intent(Intent.ACTION_DELETE,
-            //        Uri.parse("package:com.carteryagemann.marshalbandit"))
-            //        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            //mContext.stopService(new Intent().setClassName("com.carteryagemann.marshalbandit",
-            //        "com.carteryagemann.marshalbandit.BoondockSaint"));
             if (mAms != null)
-                mAms.killBackgroundProcesses("com.carteryagemann.marshalbandit");
+                mAms.killBackgroundProcesses("com.carteryagemann.boondocksaint");
             return null;
         } else {
             return data;

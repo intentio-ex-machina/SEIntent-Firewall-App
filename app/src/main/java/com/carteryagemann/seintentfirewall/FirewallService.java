@@ -96,6 +96,9 @@ public class FirewallService extends Service {
             case 7: //BanditBuster
                 mIntentChecker = new IntentCheckerBanditBuster(this);
                 break;
+            case 8: //CallChain
+                mIntentChecker = new IntentCheckerCallChain();
+                break;
             default:
                 Log.w(TAG, "Unknown policy request: " + option);
         }
