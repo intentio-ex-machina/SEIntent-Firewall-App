@@ -99,6 +99,8 @@ public class FirewallService extends Service {
             case 8: //CallChain
                 mIntentChecker = new IntentCheckerCallChain();
                 break;
+            case 9: //CameraPicker
+                mIntentChecker = new IntentCheckerCameraPicker(this);
             default:
                 Log.w(TAG, "Unknown policy request: " + option);
         }
