@@ -3,7 +3,7 @@
     <string name="app_author">Carter Yagemann</string>
     <string name="app_version">1.0</string>
     <string name="app_codename">\"Rampaging Shadow\"</string>
-    <string name="app_copyright">Copyright 2015 - All rights reserved.</string>
+    <string name="app_copyright">Copyright 2016 - All rights reserved.</string>
 
     <string-array name="policy_array">
         <item>Allow All Intents</item>
@@ -11,10 +11,6 @@
         <item>Block Browser App</item>
         <item>Block Service Intents</item>
         <item>Block Activity Intents</item>
-        <item>Block YouTube</item>
-        <item>Safe File</item>
-        <item>Bandit Buster</item>
         <item>Call Chain</item>
-        <item>Camera Picker</item>
     </string-array>
 </resources>

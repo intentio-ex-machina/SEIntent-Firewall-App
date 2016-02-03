@@ -87,20 +87,9 @@ public class FirewallService extends Service {
             case 4: //BlockActivies
                 mIntentChecker = new IntentCheckerBlockActivities();
                 break;
-            case 5: //BlockYouTube
-                mIntentChecker = new IntentCheckerBlockYouTube();
-                break;
-            case 6: //SafeFile
-                mIntentChecker = new IntentCheckerSafeFile();
-                break;
-            case 7: //BanditBuster
-                mIntentChecker = new IntentCheckerBanditBuster(this);
-                break;
-            case 8: //CallChain
+            case 5: //CallChain
                 mIntentChecker = new IntentCheckerCallChain();
                 break;
-            case 9: //CameraPicker
-                mIntentChecker = new IntentCheckerCameraPicker(this);
             default:
                 Log.w(TAG, "Unknown policy request: " + option);
         }
