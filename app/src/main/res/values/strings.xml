@@ -3,7 +3,7 @@
     <string name="app_author">Carter Yagemann</string>
     <string name="app_version">1.0</string>
     <string name="app_codename">\"Rampaging Shadow\"</string>
-    <string name="app_copyright">Copyright 2016 - All rights reserved.</string>
+    <string name="app_copyright">Copyright 2016 - GPLv3</string>
 
     <string-array name="policy_array">
         <item>Allow All Intents</item>
