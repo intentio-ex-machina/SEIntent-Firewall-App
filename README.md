@@ -1,7 +1,7 @@
 SEIntent Firewall App
 =====================
 
-This is a simple user firewall designed to work with [IEM](https://bitbucket.org/intentio-ex-machina/intentio-ex-machina).
+This is a simple user firewall designed to work with [IEM](https://github.com/intentio-ex-machina/Intentio-Ex-Machina/wiki).
 
 Policies
 --------
